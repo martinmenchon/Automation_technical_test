@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 import requests
 import uuid
 from datetime import datetime
+import traceback
 
 def init_browser():
     driver = webdriver.Remote('http://localhost:5555/wd/hub',desired_capabilities= webdriver.DesiredCapabilities.FIREFOX)
@@ -45,5 +46,7 @@ if __name__ == "__main__":
         driver.get(URL)
         find_download_page(driver)
         download_pdf(driver)
+    except Exception:
+        traceback.print_exc()
     finally:
         driver.quit()

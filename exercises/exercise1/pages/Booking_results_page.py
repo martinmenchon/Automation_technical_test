@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class Booking_results_page:
     DROPDOWN = (By.XPATH, "//*[@data-type='dropdown']")
@@ -10,6 +12,7 @@ class Booking_results_page:
     FILTER_BY_HOTELS = (By.XPATH, "//*[contains(@data-value,'204')]")
     FILTER_BY_AirC = (By.XPATH, "//*[contains(@data-id,'roomfacility-11')]")
     FILTER_BY_DOWNTOWN = (By.XPATH, "//*[contains(@data-id,'di-2287')]")
+    LOADER = (By.CSS_SELECTOR, ".sr-usp-overlay")
 
     TOTAL_PROPERTIES = (By.CSS_SELECTOR, ".sr_header > h1")
     LIST_OF_HOTELS = (By.CSS_SELECTOR, "#hotellist_inner > div.sr_item")
@@ -48,6 +51,9 @@ class Booking_results_page:
         self.driver.execute_script("arguments[0].scrollIntoView();", filter_by_downtown)
         filter_by_downtown.click()
 
+        #wait to download and update results (to be sure is the correct list)
+        wait = WebDriverWait(self.driver, 20).until(EC.invisibility_of_element_located(self.LOADER)) 
+
     def print_results(self):
         total_properties = self.driver.find_element(*self.TOTAL_PROPERTIES)
         print(total_properties.text)
@@ -62,8 +68,7 @@ class Booking_results_page:
             number_of_reviews = number_of_reviews.text.split(" ")[0]
             score = hotel.find_element(*self.SCORE)
             full_location = hotel.find_element(*self.LOCATION)
-            text_to_remove = full_location.find_elements(By.XPATH, ".//*")[0] # To remove text "show in map"
-            location = full_location.text.split(text_to_remove.text)[0]
+            location = full_location.get_attribute("textContent").splitlines()[1].strip()
             image_url = hotel.find_element(*self.IMAGE_URL)
             image_url = image_url.get_attribute("src")
 

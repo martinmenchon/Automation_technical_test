@@ -2,7 +2,6 @@ import traceback
 from selenium import webdriver
 from pages.Booking_search_page import Booking_search_page
 from pages.Booking_results_page import Booking_results_page
-import time
 
 def init_browser():
     driver = webdriver.Remote('http://localhost:5555/wd/hub',desired_capabilities= webdriver.DesiredCapabilities.FIREFOX)
@@ -25,7 +24,6 @@ if __name__ == "__main__":
 
         results_page = Booking_results_page(driver)
         results_page.filter_hotels()
-        time.sleep(4) #wait to download and update results (to be sure is the correct list)
         results_page.print_results()
     except Exception:
         traceback.print_exc()

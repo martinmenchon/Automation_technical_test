@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 import random
+import traceback
 
 def init_browser():
     firefox_options = webdriver.FirefoxOptions()
@@ -38,6 +39,7 @@ if __name__ == "__main__":
         driver.save_screenshot("/exercises/exercise3/screenshot2.png")
         random_secs = random.randint(1, 3)
         time.sleep(random_secs)# To take the screenshot without moving anything and also creating a random behaviour
-        
+    except Exception:
+        traceback.print_exc()
     finally:
         driver.quit()
