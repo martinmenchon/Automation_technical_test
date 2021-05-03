@@ -4,6 +4,7 @@ import requests
 import uuid
 from datetime import datetime
 import traceback
+import os
 
 def init_browser():
     driver = webdriver.Remote('http://localhost:5555/wd/hub',desired_capabilities= webdriver.DesiredCapabilities.FIREFOX)
@@ -34,7 +35,10 @@ def download_pdf(driver):
         file_size = pdf_url.split("/")[-1].split("_")[-1]
         
         file_name = timestamp+'_'+uuid_number+'_'+file_size
-        # print(file_name)
+        try:
+            os.mkdir('/exercises/exercise2/Downloads/')
+        except:
+            pass
         with open('/exercises/exercise2/Downloads/'+file_name, 'wb') as f:
             f.write(file_data.content)
         f.close()
